@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            width: 400px;
+            margin: 0 auto;
+            margin-top: 50px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .chat-input {
+            width: 100%;
+            padding: 10px;
+        }
+        .chat-button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <input type="text" id="chat-input" class="chat-input" placeholder="Type your message...">
+    <button class="chat-button" onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+    function sendMessage() {
+        const userInput = document.getElementById('chat-input').value;
+        document.getElementById('chat-box').innerHTML += `<div>You: ${userInput}</div>`;
+
+        fetch(`/chatbot/chat/?prompt=${userInput}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('chat-box').innerHTML += `<div>Bot: ${data.response}</div>`;
+                document.getElementById('chat-input').value = '';
+            })
+            .catch(error => console.log('Error:', error));
+    }
+</script>
+
+</body>
+</html>
